@@ -1,13 +1,12 @@
 use anchor_lang::prelude::*;
 
-pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
+pub fn propose_candidate(ctx: Context<ProposeCandidate>) -> Result<()> {
     
     Ok(())
 }
 
 #[derive(Accounts)]
-#[instruction(poll_id: u64)]
-pub struct Initialize<'info> {
+pub struct ProposeCandidate<'info> {
     #[account(mut)]
     pub signer: Signer<'info>,
 
@@ -18,20 +17,15 @@ pub struct Initialize<'info> {
         seeds = [b"poll".as_ref(), poll_id.to_le_bytes().as_ref()],
         bump
     )]
-    pub poll_account: Account<'info, PollAccount>,
+    pub candidate_account: Account<'info, CandidateAccount>,
 
     pub system_program: Program<'info,System>
 }
 
 #[account]
 #[derive(InitSpace)]
-pub struct PollAccount{
+pub struct CandidateAccount{
     #[max_len(64)]
-    pub poll_name: String,
-    #[max_len(280)]
-    pub poll_description: String,
-    pub poll_option_index: u64,
-    pub poll_start_time: u64,
-    pub poll_end_date:u64,
+    pub name: String,
+    pub num_votes: u64,
 }
-
