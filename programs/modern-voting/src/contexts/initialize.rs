@@ -1,7 +1,17 @@
 use anchor_lang::prelude::*;
 
-pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-    
+pub fn initialize(
+    ctx: Context<Initialize>,
+    poll_id: u64, 
+    start_time: u64, 
+    end_time:u64,
+    name: String,
+    description: String
+) -> Result<()> {
+    ctx.accounts.poll_account.poll_start_time = start_time;
+    ctx.accounts.poll_account.poll_end_time = end_time;
+    ctx.accounts.poll_account.poll_name = name;
+    ctx.accounts.poll_account.poll_description = description;
     Ok(())
 }
 
@@ -32,6 +42,6 @@ pub struct PollAccount{
     pub poll_description: String,
     pub poll_option_index: u64,
     pub poll_start_time: u64,
-    pub poll_end_date:u64,
+    pub poll_end_time:u64,
 }
 

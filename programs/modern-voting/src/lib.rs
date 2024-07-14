@@ -10,8 +10,24 @@ declare_id!("688SEWu1VXekVJCVq4ZbJGH8LQSHUonUPTtc9Lq5gWfg");
 pub mod modern_voting {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        contexts::initialize(ctx)
+    pub fn initialize(
+        ctx: Context<Initialize>, 
+        poll_id: u64, 
+        start_time: u64, 
+        end_time:u64,
+        name: String,
+        description: String
+    ) -> Result<()> {
+        contexts::initialize(ctx, poll_id, start_time, end_time,name,description)
+    }
+
+    pub fn propose_candidate(
+        ctx: Context<ProposeCandidate>, 
+        poll_id: u64, 
+        candidate_name:String,
+        candidate_index:u64,
+    ) -> Result<()> {
+        contexts::propose_candidate(ctx, poll_id,candidate_index, candidate_name)
     }
 }
 
