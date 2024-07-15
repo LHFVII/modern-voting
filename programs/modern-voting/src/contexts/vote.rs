@@ -8,11 +8,11 @@ pub fn vote(ctx: Context<Vote>, poll_id: u64) -> Result<()>{
     let candidate_account = &mut ctx.accounts.candidate_account;
     let current_time = Clock::get()?.unix_timestamp;
     require!(
-        current_time < ctx.accounts.poll_account.poll_end_time.try_into().unwrap(),
+        current_time > ctx.accounts.poll_account.poll_end_time.try_into().unwrap(),
         VoteProgramError::VotingEnded
     );
     require!(
-        current_time > ctx.accounts.poll_account.poll_start_time.try_into().unwrap(),
+        current_time <= ctx.accounts.poll_account.poll_start_time.try_into().unwrap(),
         VoteProgramError::VotingHasNotStarted
     );
     candidate_account.num_votes += 1;
