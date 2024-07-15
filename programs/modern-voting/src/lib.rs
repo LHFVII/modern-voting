@@ -1,4 +1,5 @@
 pub mod contexts;
+pub mod error;
 
 use anchor_lang::prelude::*;
 

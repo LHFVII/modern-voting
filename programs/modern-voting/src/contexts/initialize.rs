@@ -29,7 +29,6 @@ pub struct Initialize<'info> {
         bump
     )]
     pub poll_account: Account<'info, PollAccount>,
-
     pub system_program: Program<'info,System>
 }
 
