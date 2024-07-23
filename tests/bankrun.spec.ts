@@ -19,22 +19,34 @@ describe("Create a system account", async () => {
         const puppetProgram = new Program<ModernVoting>(IDL, provider);
         
         const [pollAddress] = PublicKey.findProgramAddressSync([Buffer.from("poll"), new anchor.BN(1).toArrayLike(Buffer, "le", 8)], puppetProgram.programId);
-        console.log("Deploying the program");
-        const client = context.banksClient;
-        const payer = context.payer;
-        const blockhash = context.lastBlockhash;
 
-        const signature = await puppetProgram.methods.initialize(
+        await puppetProgram.methods.initialize(
             new anchor.BN(1),
             new anchor.BN(0),
-            new anchor.BN(0),
+            new anchor.BN(1821707382),
             "test-poll",
             "description",
         ).rpc()
 
-        console.log(JSON.stringify(await puppetProgram.account.pollAccount.fetch(pollAddress)));
+        await puppetProgram.methods.proposeCandidate(new anchor.BN(1), "Pizza")
+            .accounts({
+            pollAccount: pollAddress
+          })
+            .rpc()
 
-        expect(1).equal(1);
+        await puppetProgram.methods.proposeCandidate(new anchor.BN(1), "Sushi")
+            .accounts({
+            pollAccount: pollAddress
+          })
+            .rpc()
+
+        await puppetProgram.methods.vote(new anchor.BN(1),"Pizza").rpc()
+        const [candidateOneAddress] = PublicKey.findProgramAddressSync([new anchor.BN(1).toArrayLike(Buffer, "le", 8),Buffer.from("Pizza") ], puppetProgram.programId);
+        const [candidateTwoAddress] = PublicKey.findProgramAddressSync([new anchor.BN(1).toArrayLike(Buffer, "le", 8),Buffer.from("Sushi") ], puppetProgram.programId);
+        const candidateOne = await puppetProgram.account.candidateAccount.fetch(candidateOneAddress);
+        const candidateTwo = await puppetProgram.account.candidateAccount.fetch(candidateTwoAddress);
+        expect(candidateOne.candidateVotes.toNumber()).equal(1);
+        expect(candidateTwo.candidateVotes.toNumber()).equal(0);
     });
     
 });

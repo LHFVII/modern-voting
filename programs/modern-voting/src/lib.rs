@@ -23,20 +23,19 @@ pub mod modern_voting {
     }
 
     pub fn propose_candidate(
-        ctx: Context<ProposeCandidate>, 
-        candidate_index:u64,
+        ctx: Context<ProposeCandidate>,
         poll_id:u64,
         candidate_name:String,
-        
     ) -> Result<()> {
-        contexts::propose_candidate(ctx, candidate_index, poll_id, candidate_name)
+        contexts::propose_candidate(ctx, poll_id, candidate_name)
     }
 
     pub fn vote(
         ctx: Context<Vote>,
         poll_id: u64,
+        candidate_name: String
     ) -> Result<()> {
-        contexts::vote(ctx,poll_id)
+        contexts::vote(ctx, poll_id, candidate_name)
     }
 }
 
