@@ -10,8 +10,6 @@ const IDL = require("../target/idl/modern_voting.json");
 const Voting = require("../target/types/modern_voting");
 
 describe("Create a system account", async () => {
-
-    
     it("Bankrun should be able to deploy the program", async () => {
         const programId = PublicKey.unique()
         const context = await startAnchor("",[{name:"modern_voting", programId: programId}],[])
